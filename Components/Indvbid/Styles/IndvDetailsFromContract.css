@@ -1,0 +1,28 @@
+.Name {
+  font-size: 2rem;
+  color: var(--mainColor);
+}
+
+.IndvDetailsFromContract {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.key_Value {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tokenNameAndImage {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.tokenAndEthImagesIndvDetails {
+  width: 25px;
+  border-radius: 50%;
+}

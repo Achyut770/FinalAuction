@@ -1,0 +1,20 @@
+.nftContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: min(10%, 20px);
+}
+
+.nftMainContainer {
+  width: min(1000px, 97%);
+  margin: 20px auto;
+}
+
+.LoadingNoNft {
+  font-size: 1.5rem;
+  height: 200px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}

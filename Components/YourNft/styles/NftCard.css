@@ -1,0 +1,12 @@
+.nftCard img {
+  width: 100%;
+  aspect-ratio: 5/3;
+  object-fit: scale-down;
+}
+
+.nftCard {
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  min-height: 200px;
+  padding: 10px;
+}

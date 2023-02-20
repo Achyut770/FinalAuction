@@ -1,0 +1,15 @@
+.detailsButton {
+  background-color: var(--mainColor);
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.disabledButton {
+  cursor: not-allowed;
+  background-color: rgb(148, 148, 243);
+}

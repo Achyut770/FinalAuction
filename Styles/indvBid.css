@@ -1,0 +1,16 @@
+.indvBid_Container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background-color: var(--bg_Color);
+  padding-block: 60px;
+}
+
+.indvBid_Container_Left {
+  width: max(500px, 70%);
+  padding-inline: max(3vw, 10px);
+}
+
+.indvBid_Container_Right {
+  width: max(200px, 30%);
+}

@@ -1,0 +1,13 @@
+.bidInput {
+  width: 80%;
+  background-color: var(--bg_Color);
+}
+
+.button {
+  width: 18%;
+  background-color: var(--mainColor);
+  color: white;
+  border-radius: 10px;
+  height: 40px;
+  margin-left: 5px;
+}

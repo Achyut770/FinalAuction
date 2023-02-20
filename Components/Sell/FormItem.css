@@ -1,0 +1,121 @@
+.makeAuctionContainer {
+  width: min(1000px, 100%);
+  margin: 40px auto;
+  display: flex;
+  flex-direction: row;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.tokenAndEthDropdown {
+  position: relative;
+}
+
+.optionDropdown {
+  position: absolute;
+  bottom: 45px;
+}
+
+.form_Section_Left {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.dropdownIndv {
+  background-color: white;
+  width: 150px;
+  padding: 3px 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid var(--bg_Color);
+  cursor: pointer;
+}
+.tokenAndEthImages {
+  width: 40px;
+  border-radius: 50%;
+}
+
+.Upload {
+  color: grey;
+  background-color: var(--bg_Color);
+  padding: 2px 0px;
+  width: 70px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.formItem_Image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: scale-down;
+}
+
+.select {
+  padding-inline: 10px;
+  width: 120px;
+  height: 30px;
+  font-size: 1.1rem;
+  padding-inline: 5px;
+  background-color: var(--bg_Color);
+  border: none;
+  border-radius: 10px;
+}
+.form {
+  padding-block: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 20px;
+}
+.input_Container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: max(3vw, 20px);
+}
+
+.form input {
+  width: max(200px, 90%);
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--bg_Color);
+  border: none;
+  outline: none;
+  padding-left: 10px;
+}
+.form input[type="file"] {
+  display: none;
+}
+
+.input_Topic {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.form button {
+  background-color: var(--mainColor);
+  color: white;
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 650px) {
+  .makeAuctionContainer {
+    flex-direction: column;
+    box-shadow: none;
+  }
+  .form_Section_Left {
+    width: 100%;
+  }
+  .form {
+    width: 100%;
+  }
+}

@@ -1,0 +1,29 @@
+.footer_Container {
+  background-color: rgb(192, 188, 188);
+  padding-block: 20px;
+  margin-top: 30px;
+}
+
+.footer_Social_medias {
+  display: flex;
+  flex-direction: row;
+  gap: max(5vw, 30px);
+  width: min(800px, 95%);
+  margin: 0px auto;
+  justify-content: center;
+}
+a {
+  text-decoration: none;
+}
+
+i {
+  color: black;
+}
+
+.footerLink {
+  display: flex;
+  margin: 0px auto;
+  gap: 8%;
+  width: min(800px, 95%);
+  justify-content: center;
+}
