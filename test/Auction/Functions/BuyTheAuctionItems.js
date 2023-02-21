@@ -18,7 +18,6 @@ const BuyTheAuctionItems = () => {
       convertEtherToWei("10"),
       86400
     );
-    const result = await data.wait();
 
     const datas = await AuctionHardhat.connect(addr1).sellToAuctionWithEth(
       "Achyut",
@@ -46,14 +45,14 @@ const BuyTheAuctionItems = () => {
       AuctionHardhat.connect(addr2).getTheItem(1, convertEtherToWei("1"))
     )
       .to.be.revertedWithCustomError(AuctionHardhat, "WhilePurchasing")
-      .withArgs(convertEtherToWei("1"), 0, convertEtherToWei("10"));
+      .withArgs();
     await expect(
       AuctionHardhat.connect(addr2).getTheItem(2, 0, {
         value: convertEtherToWei("2"),
       })
     )
       .to.be.revertedWithCustomError(AuctionHardhat, "WhilePurchasing")
-      .withArgs(convertEtherToWei("2"), 0, convertEtherToWei("10"));
+      .withArgs();
   });
   it("Ether and token should be greater than  highest bid", async () => {
     await ERC20TokenHardhat.connect(owner).transfer(
@@ -74,22 +73,14 @@ const BuyTheAuctionItems = () => {
       AuctionHardhat.connect(addr1).getTheItem(1, convertEtherToWei("25"))
     )
       .to.be.revertedWithCustomError(AuctionHardhat, "WhilePurchasing")
-      .withArgs(
-        convertEtherToWei("25"),
-        convertEtherToWei("30"),
-        convertEtherToWei("10")
-      );
+      .withArgs();
     await expect(
       AuctionHardhat.connect(addr1).getTheItem(2, convertEtherToWei("30"), {
         value: convertEtherToWei("25"),
       })
     )
       .to.be.revertedWithCustomError(AuctionHardhat, "WhilePurchasing")
-      .withArgs(
-        convertEtherToWei("25"),
-        convertEtherToWei("30"),
-        convertEtherToWei("10")
-      );
+      .withArgs();
   });
 
   it("The token or ether balances should be updated", async () => {
@@ -134,7 +125,6 @@ const BuyTheAuctionItems = () => {
 
     //res2
     expect(res2.max_Pricer).to.equal(owner.address);
-    // expect(res2.investors[owner.address]).to.equal(convertEtherToWei("10"));
     expect(res2.max_Price).to.equal(convertEtherToWei("10"));
   });
   it("Max Price and max_Pricer should be updated when higher bid is submitted", async () => {
