@@ -10,7 +10,8 @@ const fileToIpfs = async (File) => {
     {
       headers: {
         "Content-Type": `multipart/form-data`,
-        Authorization: "Bearer ",
+        Authorization:
+          "Bearer ",
       },
     }
   );
