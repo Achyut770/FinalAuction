@@ -24,13 +24,13 @@ const useHistoryData = async (input, setData, setLoader, name) => {
           );
           break;
         case "sell":
-          filters = auctionContractInstance.filters.soldAuctionToken(
+          filters = auctionContractInstance.filters.soldAuctionWithToken(
             msgSender,
             null,
             null,
             null
           );
-          filter = auctionContractInstance.filters.soldAuctionEth(
+          filter = auctionContractInstance.filters.soldAuctionWithEth(
             msgSender,
             null,
             null,
@@ -38,9 +38,16 @@ const useHistoryData = async (input, setData, setLoader, name) => {
           );
           break;
         case "buy":
-          filters = auctionContractInstance.filters.boughtAuction(
+          filters = auctionContractInstance.filters.boughtAuctionWithEth(
             null,
             msgSender,
+            null,
+            null
+          );
+          filter = auctionContractInstance.filters.boughtAuctionWithToken(
+            null,
+            msgSender,
+            null,
             null,
             null
           );
@@ -53,6 +60,8 @@ const useHistoryData = async (input, setData, setLoader, name) => {
           break;
         case "buy":
           events = await auctionContractInstance.queryFilter(filters);
+          event = await auctionContractInstance.queryFilter(filter);
+
           break;
         case "sell":
           event = await auctionContractInstance.queryFilter(filter);
@@ -63,7 +72,7 @@ const useHistoryData = async (input, setData, setLoader, name) => {
       events.map((items) => {
         datas.push(items?.args);
       });
-      if (name === "sell") {
+      if (name === "sell" || name === "buy") {
         console.log("ca");
         event.map((items) => {
           console.log(items);

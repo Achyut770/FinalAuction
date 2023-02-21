@@ -26,65 +26,70 @@ const SellToAuction = () => {
     );
   });
   it("Minting Nft > Struct and events should be updated For token", async () => {
-    const data = await AuctionHardhat.connect(addr1).sellToAuctionWithToken(
-      "Achyut",
-      ERC20TokenHardhat.address,
-      "achyut",
-      convertEtherToWei("10"),
-      86400
-    );
-    const result = await data.wait();
-
-    const events = result.events[1].args;
-    const res = await AuctionHardhat.getAuctionDetails(1);
-
     const blockNumBefore = await ethers.provider.getBlockNumber();
     const blockBefore = await ethers.provider.getBlock(blockNumBefore);
     const timestampBefore = blockBefore.timestamp;
+    await expect(
+      AuctionHardhat.connect(owner).sellToAuctionWithToken(
+        "Achyut",
+        ERC20TokenHardhat.address,
+        "achyut",
+        convertEtherToWei("10"),
+        86400
+      )
+    )
+      .to.emit(AuctionHardhat, "soldAuctionWithToken")
+      .withArgs(
+        owner.address,
+        convertEtherToWei("10"),
+        1,
+        timestampBefore + 86400 + 1,
+        ERC20TokenHardhat.address
+      );
+
+    const res = await AuctionHardhat.getAuctionDetails(1);
 
     // Struct
     expect(res.startingPrice).to.equal(convertEtherToWei("10"));
-    expect(res.auctionMaker).to.equal(addr1.address);
+    expect(res.auctionMaker).to.equal(owner.address);
     expect(res.eth).to.equal(false);
     expect(res.name).to.equal("achyut");
-    expect(res.EndingDate).to.equal(timestampBefore + 86400);
+    expect(res.EndingDate).to.equal(timestampBefore + 86400 + 1);
     expect(res.tokenAddress).to.equal(ERC20TokenHardhat.address);
-
-    // Events
-    expect(events.auctioner).to.equal(addr1.address);
-    expect(events.minimum_Price).to.equal(convertEtherToWei("10"));
-    expect(events.Token_id).to.equal("1");
-    expect(events.ending_Date).to.equal(timestampBefore + 86400);
+    expect(res.ended).to.equal(false);
+    expect(res.started).to.equal(true);
   });
   it("Minting Nft > Struct and events should be updated For Ether", async () => {
     // await AuctionHardhat.connect(addr1
-
-    const data = await AuctionHardhat.connect(addr1).sellToAuctionWithEth(
-      "Achyut",
-      "achyut",
-      convertEtherToWei("10"),
-      86400
-    );
-    const result = await data.wait();
-    const events = result.events[1].args;
-
-    const res = await AuctionHardhat.getAuctionDetails(1);
-
     const blockNumBefore = await ethers.provider.getBlockNumber();
     const blockBefore = await ethers.provider.getBlock(blockNumBefore);
     const timestampBefore = blockBefore.timestamp;
+    await expect(
+      AuctionHardhat.connect(addr1).sellToAuctionWithEth(
+        "Achyut",
+        "achyut",
+        convertEtherToWei("10"),
+        86400
+      )
+    )
+      .to.emit(AuctionHardhat, "soldAuctionWithEth")
+      .withArgs(
+        addr1.address,
+        convertEtherToWei("10"),
+        1,
+        timestampBefore + 86400 + 1
+      );
+
+    const res = await AuctionHardhat.getAuctionDetails(1);
 
     // Struct
     expect(res.startingPrice).to.equal(convertEtherToWei("10"));
     expect(res.auctionMaker).to.equal(addr1.address);
     expect(res.eth).to.equal(true);
-    expect(res.EndingDate).to.equal(timestampBefore + 86400);
-
-    //Events;
-    expect(events.auctioner).to.equal(addr1.address);
-    expect(events.minimum_Price).to.equal(convertEtherToWei("10"));
-    expect(events.Token_id).to.equal("1");
-    expect(events.ending_Date).to.equal(timestampBefore + 86400);
+    expect(res.name).to.equal("achyut");
+    expect(res.EndingDate).to.equal(timestampBefore + 86400 + 1);
+    expect(res.ended).to.equal(false);
+    expect(res.started).to.equal(true);
   });
 };
 

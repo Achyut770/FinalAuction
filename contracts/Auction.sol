@@ -11,31 +11,34 @@ contract Auction is Ownable {
         erc721token = addr;
     }
 
-    event soldAuctionEth(
+    event soldAuctionWithEth(
         address indexed auctioner,
         uint256 indexed minimum_Price,
         uint256 indexed Token_id,
         uint256 ending_Date
     );
-    event soldAuctionToken(
+    event soldAuctionWithToken(
         address indexed auctioner,
         uint256 indexed minimum_Price,
         uint256 indexed Token_id,
         uint256 ending_Date,
         address tokenAddress
     );
-    event boughtAuction(
+    event boughtAuctionWithEth(
         address indexed auctioner,
         address indexed buyer,
         uint256 indexed Token_id,
         uint256 amount
     );
 
-    error WhilePurchasing(
+    event boughtAuctionWithToken(
+        address indexed auctioner,
+        address indexed buyer,
+        uint256 indexed Token_id,
         uint256 amount,
-        uint256 min_price,
-        uint256 starting_Price
+        address token_Address
     );
+    error WhilePurchasing();
     error NotStarted();
     error AlreadyEnded();
     error Ended();
@@ -89,7 +92,7 @@ contract Auction is Ownable {
             true,
             _endingDate
         );
-        emit soldAuctionEth(
+        emit soldAuctionWithEth(
             msg.sender,
             _amount,
             id,
@@ -130,7 +133,7 @@ contract Auction is Ownable {
             false,
             _endingDate
         );
-        emit soldAuctionToken(
+        emit soldAuctionWithToken(
             msg.sender,
             _amount,
             id,
@@ -147,15 +150,11 @@ contract Auction is Ownable {
         AuctionDetails storage indv = AuctionContainer[Token_id];
         if (investors[Token_id][msg.sender] == 0) {
             if (amount < indv.startingPrice) {
-                revert WhilePurchasing(
-                    amount,
-                    indv.max_Price,
-                    indv.startingPrice
-                );
+                revert WhilePurchasing();
             }
         }
         if (investors[Token_id][msg.sender] + amount <= indv.max_Price) {
-            revert WhilePurchasing(amount, indv.max_Price, indv.startingPrice);
+            revert WhilePurchasing();
         }
         if (!eth) {
             ERC20Token(indv.tokenAddress).transferFrom(
@@ -201,13 +200,26 @@ contract Auction is Ownable {
             indv.ended = true;
             if (indv.eth) {
                 indv.auctionMaker.transfer(indv.max_Price);
+                emit boughtAuctionWithEth(
+                    indv.auctionMaker,
+                    indv.max_Pricer,
+                    token_id,
+                    indv.max_Price
+                );
             } else {
                 ERC20Token(indv.tokenAddress).transfer(
                     indv.auctionMaker,
                     indv.max_Price
                 );
+                emit boughtAuctionWithToken(
+                    indv.auctionMaker,
+                    indv.max_Pricer,
+                    token_id,
+                    indv.max_Price,
+                    indv.tokenAddress
+                );
             }
-            emit boughtAuction(
+            emit boughtAuctionWithEth(
                 indv.auctionMaker,
                 indv.max_Pricer,
                 token_id,

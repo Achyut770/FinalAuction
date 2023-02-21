@@ -4,7 +4,6 @@ const { expect } = require("chai");
 
 const SubmitMoneyToWinner = () => {
   let addr1;
-  let ERC721TokenHardhat;
   let AuctionHardhat;
   let ERC20TokenHardhat;
 
@@ -17,7 +16,7 @@ const SubmitMoneyToWinner = () => {
       ERC721TokenHardhat,
     } = await ContractInstances());
     const data = await await AuctionHardhat.connect(
-      addr1
+      owner
     ).sellToAuctionWithToken(
       "Achyut",
       ERC20TokenHardhat.address,
@@ -63,22 +62,39 @@ const SubmitMoneyToWinner = () => {
   it("When Submitting Item if the other than highest bider and auctionMaker", async () => {
     await ethers.provider.send("evm_increaseTime", [87400]);
     await expect(
-      AuctionHardhat.connect(owner).SubmitItem(1)
+      AuctionHardhat.connect(addr2).SubmitItem(1)
     ).to.be.revertedWithCustomError(AuctionHardhat, "NotAuthorised");
   });
-  it("The code should be executed and balance of smart Contract should be updated", async () => {
+  it("The code should be executed and balance of smart Contract and AuctionMaker should be updated", async () => {
     await ethers.provider.send("evm_increaseTime", [87400]);
     await expect(
       AuctionHardhat.connect(addr2).SubmitItem(2)
-    ).to.changeEtherBalance(AuctionHardhat.address, convertEtherToWei("-10"));
-    // await expect(await AuctionHardhat.connect(addr2).SubmitItem(2)).to.changeEtherBalance(addr2.address, convertEtherToWei("10"));
+    ).to.changeEtherBalances(
+      [AuctionHardhat.address, addr1.address],
+      [convertEtherToWei("-10"), convertEtherToWei("10")]
+    );
   });
-  it("The code should be executed and balance of auctionMaker should be updated", async () => {
+
+  it("event should be emmited when purchasing the item for ether ", async () => {
     await ethers.provider.send("evm_increaseTime", [87400]);
-    await expect(
-      AuctionHardhat.connect(addr2).SubmitItem(2)
-    ).to.changeEtherBalance(addr1.address, convertEtherToWei("10"));
+    await expect(AuctionHardhat.connect(addr2).SubmitItem(2))
+      .to.emit(AuctionHardhat, "boughtAuctionWithEth")
+      .withArgs(addr1.address, addr2.address, 2, convertEtherToWei("10"));
   });
+
+  it("event should be emmited when purchasing the item for token", async () => {
+    await ethers.provider.send("evm_increaseTime", [87400]);
+    await expect(AuctionHardhat.connect(owner).SubmitItem(1))
+      .to.emit(AuctionHardhat, "boughtAuctionWithToken")
+      .withArgs(
+        owner.address,
+        addr1.address,
+        1,
+        convertEtherToWei("10"),
+        ERC20TokenHardhat.address
+      );
+  });
+
   it("The code should be executed and struct should be updated and again the function cannot be called ", async () => {
     await ethers.provider.send("evm_increaseTime", [87400]);
     await AuctionHardhat.connect(addr2).SubmitItem(2);
