@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 const IndvDetailsButton = ({ data, id, handleChange, input, setClose }) => {
   const { fetchData } = useContext(signer);
   const [loader, setLoader] = React.useState(false);
-  console.log(fetchData);
 
   const { address } = useAccount();
   const [bidBoolean, setBidBoolean] = useState(true);
@@ -56,21 +55,23 @@ const IndvDetailsButton = ({ data, id, handleChange, input, setClose }) => {
     return <Loader />;
   }
 
-  if (address === data.auctionMaker || address === data.max_Pricer)
+  if (address === data.auctionMaker)
     return (
       <button
         onClick={ExchangeTheItems}
         className={
           !auctionEnded ? "detailsButton disabledButton" : ` detailsButton `
         }
-        disabled={!auctionEnded}>
+        disabled={!auctionEnded}
+      >
         {auctionEnded ? "Exchange Items" : "Wait Until Auction Ends"}
       </button>
     );
   return bidBoolean ? (
     <button
       className={` detailsButton `}
-      onClick={() => (auctionEnded ? handleRefund() : handleSubmit())}>
+      onClick={() => (auctionEnded ? handleRefund() : handleSubmit())}
+    >
       {auctionEnded
         ? "Get Refund"
         : Number(data.max_Price._hex) === 0
